@@ -8,11 +8,21 @@ class FullPost extends Component {
         loadedPost: null
     }
 
+    componentDidMount() {
+        console.log(this.props);
+        this.lodaData();
+    }
+
     componentDidUpdate() {
-        if(this.props.id){
-            if(!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)) {
+        this.lodaData();
+    }
+
+    lodaData() {
+        // gets the param id passed by the link to this post and checks if id has changed
+        if(this.props.match.params.id){
+            if(!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== +this.props.match.params.id)) {
                 // http request for the post with the passed id
-                axios.get('posts/' + this.props.id)
+                axios.get('posts/' + this.props.match.params.id)
                     .then(response => {
                     // console.log(response);
                     // sets the the loadedPost satae with response.data
@@ -22,8 +32,8 @@ class FullPost extends Component {
         }
     }
 
-    deletePstHandler = () => {
-        axios.delete('posts/' + this.props.id)
+    deletePostHandler = () => {
+        axios.delete('posts/' + this.props.match.params.id)
             .then(response => {
                 console.log(response);
             });
@@ -40,7 +50,7 @@ class FullPost extends Component {
                     <h1>{this.state.loadedPost.title}</h1>
                     <p>{this.state.loadedPost.body}</p>
                     <div className="Edit">
-                        <button className="Delete" onClick={this.deletePstHandler}>Delete</button>
+                        <button className="Delete" onClick={this.deletePostHandler}>Delete</button>
                     </div>
                 </div>
     
